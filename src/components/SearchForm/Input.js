@@ -1,0 +1,27 @@
+const Input = ({label, value, type, onChange, checked}) => {
+
+    if (type === "radio") {
+        return (
+            <>
+                <label >{label}
+                <input type={type} name="searchBy" value={value} onChange={onChange} checked={checked} required/>
+                </label>
+            </>
+        )
+    } else if (type === "text") {
+        return (
+            <>
+                <input
+                    type={type}
+                    className="search-term"
+                    name="searchBy" id={value}
+                    placeholder="Search...."
+                    onChange={onChange}
+                    required />
+            </>
+        )
+    }
+    
+}
+
+export default Input
