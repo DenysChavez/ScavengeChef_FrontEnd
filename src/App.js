@@ -3,8 +3,9 @@ import { useState } from "react";
 import SearchForm from "./components/SearchForm/SearchForm";
 import Results from "./components/Results/Results";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
+import Quote from "./components/Quote";
 
-const App = ({ recipes }) => {
+const App = ({ recipes, quotes }) => {
   const [filteredRecipes, setFilteredRecipes] = useState(recipes);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
@@ -45,12 +46,7 @@ const App = ({ recipes }) => {
           <h2 className="title">
             <a href="">Find Recipe For Your Ingredients</a>
           </h2>
-          <blockquote>
-            "There cannot be good living where there is not good drinking."
-            <br />
-            <cite>- Benjamin Franklin</cite>
-          </blockquote>
-
+          <Quote quotes={quotes}/>
           <div className="recipe-search-box">
             <SearchForm handleSubmit={handleSubmit} />
           </div>
