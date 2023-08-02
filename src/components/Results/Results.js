@@ -1,10 +1,12 @@
 import Recipe from "./Recipe"
 
-const Results = ({recipes}) => {
+const Results = ({recipes, showDetails}) => {
     return (
         <div id="recipes">
             {recipes.map((recipe, i) => 
-                <Recipe key={i} recipe={recipe} />
+                <Recipe key={i}
+                    recipe={recipe}
+                    showDetails={showDetails} />
             )}
         </div>
     )

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-const Recipe = ({ recipe }) => {
+const Recipe = ({ recipe, showDetails }) => {
     
     return (
         <div className="recipe-item">
@@ -8,10 +8,9 @@ const Recipe = ({ recipe }) => {
             </div>
             <div className="recipe-name">
                 <h3>{recipe.name}</h3>
-                <a href="" className="recipe-btn">Get Recipe</a>
+                <a className="recipe-btn" onClick={() => showDetails(recipe)}>Get Recipe</a>
             </div>
         </div>
     )
 }
-
 export default Recipe

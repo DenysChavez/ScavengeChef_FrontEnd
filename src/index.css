@@ -18,6 +18,10 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+a {
+    text-decoration: none;
+}
+
 /*  */
 .btn {
     font-family: inherit;
@@ -166,6 +170,7 @@ legend {
 }
 .recipe-btn:hover {
     background: var(--brown-dark);
+    cursor: pointer;
 }
 
 /* recipe Details */
@@ -188,7 +193,6 @@ legend {
     width: 90%;
     height: 90%;
     overflow-y: scroll;
-    display: none;
     padding: 2rem 0;
 }
 .recipe-details::-webkit-scrollbar{
