@@ -20,7 +20,9 @@ body {
 
 a {
     text-decoration: none;
+
 }
+
 
 /*  */
 .btn {
@@ -301,6 +303,41 @@ legend {
 ul {
     list-style: none;
 }
+
+.newRecipeBtn {
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 0.75rem 0;
+    display: block;
+    width: 250px;
+    margin: 1rem auto;
+    border-radius: 2rem;
+    background: var(--brown-dark);
+    color: white;
+    border-style: none;
+    transition: all 0.4s linear;
+}
+
+.newRecipeBtn:hover {
+    background-color: var(--browny);
+}
+/* NewRecipeForm */
+.newRecipeForm {
+    background-color: var(--brown-dark);
+    color: white;
+    border-radius: 2rem;
+}
+
+.close-new-form {
+    font-size: 1.8rem;
+    background: #fff;
+    border: none;
+    width: 42px;
+    height: 40px;
+    border-radius: 50%;
+    align-content: center;
+}
+
 
 /*  */
 .notFound {

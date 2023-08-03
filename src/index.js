@@ -94,5 +94,5 @@ const foodQuotes = [
 ]
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <App recipes={recipes} quotes={foodQuotes} />
+  <App data={recipes} quotes={foodQuotes} />
 );

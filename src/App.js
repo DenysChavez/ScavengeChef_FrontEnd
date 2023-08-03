@@ -4,12 +4,15 @@ import SearchForm from "./components/SearchForm/SearchForm";
 import Results from "./components/Results/Results";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Quote from "./components/Quote";
+import NewRecipeForm from "./components/NewRecipeForm";
 
-const App = ({ recipes, quotes }) => {
-  const [filteredRecipes, setFilteredRecipes] = useState(recipes);
+const App = ({ data, quotes }) => {
+  const [recipes, setRecipes] = useState(data);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [addNewRecipeBtn, setAddNewRecipeBtn] = useState(false);
 
-  const handleSubmit = ({ searchType, searchTerm }) => {
+  console.log(recipes);
+  const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
 
     if (searchType === "ingredient-name") {
@@ -28,10 +31,11 @@ const App = ({ recipes, quotes }) => {
       );
     }
 
-    setFilteredRecipes(results);
+    setRecipes(results);
   };
 
   const handleShowDetailRecipe = (recipe) => {
+    console.log(recipe);
     setSelectedRecipe(recipe);
   };
 
@@ -39,6 +43,21 @@ const App = ({ recipes, quotes }) => {
     setSelectedRecipe(null);
   };
 
+  const handleCloseNewRecipeForm = () => {
+    setAddNewRecipeBtn(false);
+  };
+
+  const handleNewRecipe = (newRecipe) => {
+    const newObject = {
+      ...newRecipe,
+      id: recipes.length + 1
+    }
+
+    setRecipes(recipes.concat(newObject))
+    setAddNewRecipeBtn(false);
+  };
+
+  ////////////////// RETURN/////////////////
   return (
     <div className="container">
       <div className="recipe-wrapper">
@@ -46,19 +65,34 @@ const App = ({ recipes, quotes }) => {
           <h2 className="title">
             <a href="">Find Recipe For Your Ingredients</a>
           </h2>
-          <Quote quotes={quotes}/>
+          <Quote quotes={quotes} />
           <div className="recipe-search-box">
-            <SearchForm handleSubmit={handleSubmit} />
+            <SearchForm handleSubmit={handleSearchSubmit} />
           </div>
         </div>
 
+        {!addNewRecipeBtn && (
+          <div className="">
+            <button className="btn newRecipeBtn" onClick={() => setAddNewRecipeBtn(true)}>
+              Create a New Recipe
+            </button>
+          </div>
+        )}
+
+        {addNewRecipeBtn && (
+          <NewRecipeForm
+            addRecipe={handleNewRecipe}
+            closeForm={handleCloseNewRecipeForm}
+          />
+        )}
+
         <div className="recipe-result">
           <Results
-            recipes={filteredRecipes}
+            recipes={recipes}
             showDetails={handleShowDetailRecipe}
           />
         </div>
-        {selectedRecipe &&(
+        {selectedRecipe && (
           <RecipeDetails
             recipe={selectedRecipe}
             closeRecipe={handleCloseDetailRecipe}
