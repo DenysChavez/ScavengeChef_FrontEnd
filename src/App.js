@@ -75,12 +75,13 @@ const App = () => {
   };
 
   const handleNewRecipe = (newRecipe) => {
-    const newObject = {
-      ...newRecipe,
-      id: recipes.length + 1,
-    };
 
-    setRecipes(recipes.concat(newObject));
+    axios
+      .post('http://localhost:3001/recipes', newRecipe)
+      .then(response => {
+        setRecipes(recipes.concat(response.data))
+      })
+    // setRecipes(recipes.concat(newObject));
     setAddNewRecipeBtn(false);
   };
 
