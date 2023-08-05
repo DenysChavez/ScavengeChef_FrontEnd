@@ -9,6 +9,7 @@
 :root {
     --browny: #B08045;
     --brown-dark: #594123;
+    --favorite: rgb(144, 65, 65);
 }
 
 body {
@@ -25,7 +26,7 @@ a {
 
 .fa-heart {
     font-size: 2.05rem;
-    color: rgb(144, 65, 65);
+    color: var(--favorite);
 }
 
 .fa-heart:hover {
@@ -329,6 +330,26 @@ ul {
 .newRecipeBtn:hover {
     background-color: var(--browny);
 }
+
+/* Favorite Btn */
+.favoriteBtn {
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 0.75rem 0;
+    display: block;
+    width: 250px;
+    margin: 1rem auto;
+    border-radius: 2rem;
+    background: var(--favorite);
+    color: white;
+    border-style: none;
+    transition: all 0.4s linear;
+}
+
+.favoriteBtn:hover {
+    background-color: var(--brown-dark);
+} 
+
 /* NewRecipeForm */
 .newRecipeForm {
     background-color: var(--brown-dark);

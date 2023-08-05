@@ -13,12 +13,14 @@ const App = () => {
   const [quotes, setQuotes] = useState({});
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [addNewRecipeBtn, setAddNewRecipeBtn] = useState(false);
-  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [showAll, setShowAll] = useState(true);
 
   const startFetchRecipesHook = () => {
     recipeService
       .getAll()
-      .then(initialRecipes => {setRecipes(initialRecipes)})
+      .then((initialRecipes) => {
+        setRecipes(initialRecipes);
+      })
       .catch((error) => {
         console.error("Error fetching recipes", error);
       });
@@ -39,6 +41,22 @@ const App = () => {
 
   useEffect(startFetchRecipesHook, []);
   useEffect(fetchQuotesHook, []);
+
+  const createNewRecipe = (newRecipe) => {
+    recipeService.create(newRecipe).then((createdRecipe) => {
+      setRecipes(recipes.concat(createdRecipe));
+    });
+    setAddNewRecipeBtn(false);
+  };
+
+  const toggleFavoriteRecipe = (id) => {
+    const recipe = recipes.find((n) => n.id === id);
+    const changedRecipe = { ...recipe, like: !recipe.like };
+
+    recipeService.update(id, changedRecipe).then((returnedRecipe) => {
+      setRecipes(recipes.map((n) => (n.id !== id ? n : returnedRecipe)));
+    });
+  };
 
 
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
@@ -75,26 +93,7 @@ const App = () => {
     setAddNewRecipeBtn(false);
   };
 
-  const handleNewRecipe = (newRecipe) => {
-
-    recipeService
-      .create(newRecipe)
-      .then(createdRecipe => {
-        setRecipes(recipes.concat(createdRecipe))
-      })
-    setAddNewRecipeBtn(false);
-  };
-
-  const toggleFavoriteRecipe = (id) => {
-    const recipe = recipes.find(n => n.id === id);
-    const changedRecipe = { ...recipe, like: !recipe.like }
-
-    recipeService
-      .update(id, changedRecipe)
-      .then(returnedRecipe => {
-      setRecipes(recipes.map(n => n.id !== id ? n : returnedRecipe))
-    })
-  }
+  const recipesToShow = showAll ? recipes : recipes.filter(recipe => recipe.like)
 
   ////////////////// RETURN/////////////////
   return (
@@ -121,16 +120,30 @@ const App = () => {
           </div>
         )}
 
+        <div className="">
+          <button
+            className="btn favoriteBtn"
+            onClick={()=> setShowAll(!showAll)}
+          >
+            Show {showAll ? 'My Favorites' : 'All'}
+          </button>
+        </div>
+
         {addNewRecipeBtn && (
           <NewRecipeForm
-            addRecipe={handleNewRecipe}
+            addRecipe={createNewRecipe}
             closeForm={handleCloseNewRecipeForm}
           />
         )}
 
         <div className="recipe-result">
-          <Results recipes={recipes} showDetails={handleShowDetailRecipe} toggleFavorite={toggleFavoriteRecipe} />
+          <Results
+            recipes={recipesToShow}
+            showDetails={handleShowDetailRecipe}
+            toggleFavorite={toggleFavoriteRecipe}
+          />
         </div>
+
         {selectedRecipe && (
           <RecipeDetails
             recipe={selectedRecipe}
