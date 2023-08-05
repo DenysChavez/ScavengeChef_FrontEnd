@@ -23,6 +23,14 @@ a {
 
 }
 
+.fa-heart {
+    font-size: 2.05rem;
+    color: rgb(144, 65, 65);
+}
+
+.fa-heart:hover {
+    cursor: pointer;
+}
 
 /*  */
 .btn {

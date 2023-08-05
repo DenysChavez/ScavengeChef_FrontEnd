@@ -12,6 +12,7 @@ const App = () => {
   const [quotes, setQuotes] = useState({});
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [addNewRecipeBtn, setAddNewRecipeBtn] = useState(false);
+  const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
   const startFetchRecipesHook = () => {
     axios
@@ -39,6 +40,7 @@ const App = () => {
 
   useEffect(startFetchRecipesHook, []);
   useEffect(fetchQuotesHook, []);
+
 
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
@@ -85,6 +87,16 @@ const App = () => {
     setAddNewRecipeBtn(false);
   };
 
+  const toggleFavoriteRecipe = (id) => {
+    const url = `http://localhost:3001/recipes/${id}`;
+    const recipe = recipes.find(n => n.id === id);
+    const changedRecipe = { ...recipe, like: !recipe.like }
+
+    axios.put(url, changedRecipe).then(response => {
+      setRecipes(recipes.map(n => n.id !== id ? n : response.data))
+    })
+  }
+
   ////////////////// RETURN/////////////////
   return (
     <div className="container">
@@ -118,7 +130,7 @@ const App = () => {
         )}
 
         <div className="recipe-result">
-          <Results recipes={recipes} showDetails={handleShowDetailRecipe} />
+          <Results recipes={recipes} showDetails={handleShowDetailRecipe} toggleFavorite={toggleFavoriteRecipe} />
         </div>
         {selectedRecipe && (
           <RecipeDetails
