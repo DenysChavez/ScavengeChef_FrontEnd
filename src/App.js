@@ -6,6 +6,7 @@ import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Quote from "./components/Quote";
 import NewRecipeForm from "./components/NewRecipeForm";
 import axios from "axios";
+import recipeService from "./service/recipes";
 
 const App = () => {
   const [recipes, setRecipes] = useState([]);
@@ -15,11 +16,9 @@ const App = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
   const startFetchRecipesHook = () => {
-    axios
-      .get("http://localhost:3001/recipes")
-      .then((response) => {
-        setRecipes(response.data);
-      })
+    recipeService
+      .getAll()
+      .then(initialRecipes => {setRecipes(initialRecipes)})
       .catch((error) => {
         console.error("Error fetching recipes", error);
       });
@@ -78,22 +77,22 @@ const App = () => {
 
   const handleNewRecipe = (newRecipe) => {
 
-    axios
-      .post('http://localhost:3001/recipes', newRecipe)
-      .then(response => {
-        setRecipes(recipes.concat(response.data))
+    recipeService
+      .create(newRecipe)
+      .then(createdRecipe => {
+        setRecipes(recipes.concat(createdRecipe))
       })
-    // setRecipes(recipes.concat(newObject));
     setAddNewRecipeBtn(false);
   };
 
   const toggleFavoriteRecipe = (id) => {
-    const url = `http://localhost:3001/recipes/${id}`;
     const recipe = recipes.find(n => n.id === id);
     const changedRecipe = { ...recipe, like: !recipe.like }
 
-    axios.put(url, changedRecipe).then(response => {
-      setRecipes(recipes.map(n => n.id !== id ? n : response.data))
+    recipeService
+      .update(id, changedRecipe)
+      .then(returnedRecipe => {
+      setRecipes(recipes.map(n => n.id !== id ? n : returnedRecipe))
     })
   }
 
