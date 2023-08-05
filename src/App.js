@@ -1,17 +1,45 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchForm from "./components/SearchForm/SearchForm";
 import Results from "./components/Results/Results";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Quote from "./components/Quote";
 import NewRecipeForm from "./components/NewRecipeForm";
+import axios from "axios";
 
-const App = ({ data, quotes }) => {
-  const [recipes, setRecipes] = useState(data);
+const App = () => {
+  const [recipes, setRecipes] = useState([]);
+  const [quotes, setQuotes] = useState({});
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [addNewRecipeBtn, setAddNewRecipeBtn] = useState(false);
 
-  console.log(recipes);
+  const startFetchRecipesHook = () => {
+    axios
+      .get("http://localhost:3001/recipes")
+      .then((response) => {
+        setRecipes(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching recipes", error);
+      });
+  };
+
+  const fetchQuotesHook = () => {
+    axios
+      .get("http://localhost:3001/quotes")
+      .then((response) => {
+        const data = response.data;
+        const randomNumer = Math.floor(Math.random() * data.length);
+        setQuotes(data[randomNumer]);
+      })
+      .catch((error) => {
+        console.error("Error fetching quotes", error);
+      });
+  };
+
+  useEffect(startFetchRecipesHook, []);
+  useEffect(fetchQuotesHook, []);
+
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
 
@@ -35,7 +63,6 @@ const App = ({ data, quotes }) => {
   };
 
   const handleShowDetailRecipe = (recipe) => {
-    console.log(recipe);
     setSelectedRecipe(recipe);
   };
 
@@ -50,10 +77,10 @@ const App = ({ data, quotes }) => {
   const handleNewRecipe = (newRecipe) => {
     const newObject = {
       ...newRecipe,
-      id: recipes.length + 1
-    }
+      id: recipes.length + 1,
+    };
 
-    setRecipes(recipes.concat(newObject))
+    setRecipes(recipes.concat(newObject));
     setAddNewRecipeBtn(false);
   };
 
@@ -73,7 +100,10 @@ const App = ({ data, quotes }) => {
 
         {!addNewRecipeBtn && (
           <div className="">
-            <button className="btn newRecipeBtn" onClick={() => setAddNewRecipeBtn(true)}>
+            <button
+              className="btn newRecipeBtn"
+              onClick={() => setAddNewRecipeBtn(true)}
+            >
               Create a New Recipe
             </button>
           </div>
@@ -87,10 +117,7 @@ const App = ({ data, quotes }) => {
         )}
 
         <div className="recipe-result">
-          <Results
-            recipes={recipes}
-            showDetails={handleShowDetailRecipe}
-          />
+          <Results recipes={recipes} showDetails={handleShowDetailRecipe} />
         </div>
         {selectedRecipe && (
           <RecipeDetails
