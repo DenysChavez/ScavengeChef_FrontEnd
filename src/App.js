@@ -4,7 +4,7 @@ import SearchForm from "./components/SearchForm/SearchForm";
 import Results from "./components/Results/Results";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Quote from "./components/Quote";
-import NewRecipeForm from "./components/NewRecipeForm";
+import RecipeForm from "./components/RecipeForm";
 import axios from "axios";
 import recipeService from "./service/recipes";
 
@@ -58,7 +58,6 @@ const App = () => {
     });
   };
 
-
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
 
@@ -93,7 +92,9 @@ const App = () => {
     setAddNewRecipeBtn(false);
   };
 
-  const recipesToShow = showAll ? recipes : recipes.filter(recipe => recipe.like)
+  const recipesToShow = showAll
+    ? recipes
+    : recipes.filter((recipe) => recipe.like);
 
   ////////////////// RETURN/////////////////
   return (
@@ -123,15 +124,16 @@ const App = () => {
         <div className="">
           <button
             className="btn favoriteBtn"
-            onClick={()=> setShowAll(!showAll)}
+            onClick={() => setShowAll(!showAll)}
           >
-            Show {showAll ? 'My Favorites' : 'All'}
+            Show {showAll ? "My Favorites" : "All"}
           </button>
         </div>
 
         {addNewRecipeBtn && (
-          <NewRecipeForm
-            addRecipe={createNewRecipe}
+          <RecipeForm
+            type="create"
+            addOrEditRecipe={createNewRecipe}
             closeForm={handleCloseNewRecipeForm}
           />
         )}

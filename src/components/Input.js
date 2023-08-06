@@ -1,5 +1,4 @@
-const Input = ({ label, value, type, onChange, checked, component }) => {
-
+const Input = ({ label, value, type, onChange, checked, component, handleAddToList }) => {
   if (component === "search") {
     if (type === "radio") {
       return (
@@ -36,12 +35,11 @@ const Input = ({ label, value, type, onChange, checked, component }) => {
     return (
       <label>
         {label}
-            <input 
-                value={value}
-                type={type}
-                onChange={onChange}
-                required
-        />
+        <input
+          value={value}
+          type={type}
+          onChange={onChange}
+          required />
       </label>
     );
   }

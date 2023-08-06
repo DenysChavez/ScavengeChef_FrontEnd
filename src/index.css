@@ -309,9 +309,6 @@ legend {
     opacity: 0.8;
 }
 
-ul {
-    list-style: none;
-}
 
 .newRecipeBtn {
     font-weight: 500;
@@ -377,6 +374,15 @@ ul {
     width: 100%;
 }
 
+/*  RecipeForm */
+.list {
+    font-size: 1.05rem;
+    font-weight: 90;
+}
+
+span:hover {
+    cursor: pointer;
+}
 
 /* Media Queries */
 @media screen and (min-width: 600px){
