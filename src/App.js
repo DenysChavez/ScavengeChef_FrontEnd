@@ -49,6 +49,19 @@ const App = () => {
     setAddNewRecipeBtn(false);
   };
 
+  const updateRecipe = (newRecipe) => {
+    recipeService
+      .update(newRecipe.id, newRecipe)
+      .then((returnedRecipe) => {
+        setRecipes(recipes.map(n => n.id !== newRecipe.id ? n : returnedRecipe));
+        
+        // If the updated recipe is the currently selected recipe, update it as well
+        if (selectedRecipe && selectedRecipe.id === newRecipe.id) {
+          setSelectedRecipe(returnedRecipe);
+        }
+      });
+  };
+
   const toggleFavoriteRecipe = (id) => {
     const recipe = recipes.find((n) => n.id === id);
     const changedRecipe = { ...recipe, like: !recipe.like };
@@ -150,6 +163,7 @@ const App = () => {
           <RecipeDetails
             recipe={selectedRecipe}
             closeRecipe={handleCloseDetailRecipe}
+            updateRecipe={updateRecipe}
           />
         )}
       </div>

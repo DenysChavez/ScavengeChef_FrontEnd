@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MoreDetails from "./MoreDetails";
 import RecipeForm from "../RecipeForm";
 
-const RecipeDetails = ({ recipe, closeRecipe }) => {
+const RecipeDetails = ({ recipe, closeRecipe, updateRecipe }) => {
+
   const [editRecipeBtn, setEditRecipeBtn] = useState(false);
+
+  const [name, setName] = useState(recipe.name);
+  const [ingredients, setIngredients] = useState(recipe.ingredients);
+  const [instructions, setInstructions] = useState(recipe.instructions);
+  const [category, setCategory] = useState(recipe.category);
+  const [image, setImage] = useState(recipe.image);
 
   return (
     // Close Btn //
@@ -24,40 +31,19 @@ const RecipeDetails = ({ recipe, closeRecipe }) => {
 
       {!editRecipeBtn && (
         <div className="recipe-details-content">
-          <h2 className="recipe-title">{recipe.name}</h2>
-          <p className="recipe-category">{recipe.category}</p>
-          <MoreDetails title="Ingredients:" details={recipe.ingredients} />
-          <MoreDetails title="Instructions:" details={recipe.instructions} />
+          <h2 className="recipe-title">{name}</h2>
+          <p className="recipe-category">{category}</p>
+          <MoreDetails title="Ingredients:" details={ingredients} />
+          <MoreDetails title="Instructions:" details={instructions} />
           <div className="recipe-details-img">
-            <img src={recipe.image} alt={recipe.name} />
+            <img src={image} alt={name} />
           </div>
         </div>
       )}
 
       {editRecipeBtn && (
         <div className="recipe-details-content">
-          <button
-            className="btn editBtn"
-            onClick={() => setEditRecipeBtn(false)}
-          >
-            Save
-          </button>
-
-          <button
-            className="btn editBtn"
-            onClick={() => setEditRecipeBtn(false)}
-          >
-            Calcel
-          </button>
-
-          <RecipeForm />
-          {/* <h2 className="recipe-title">{recipe.name}</h2>
-          <p className="recipe-category">{recipe.category}</p>
-          <MoreDetails title="Ingredients:" details={recipe.ingredients} />
-          <MoreDetails title="Instructions:" details={recipe.instructions} />
-          <div className="recipe-details-img">
-            <img src={recipe.image} alt={recipe.name} />
-          </div> */}
+          <RecipeForm type="edit" recipeToEdit={recipe} addOrEditRecipe={updateRecipe} returnBack={setEditRecipeBtn} />
         </div>
       )}
     </div>

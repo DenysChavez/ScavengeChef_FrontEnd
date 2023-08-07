@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "./Input";
 
-const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
+const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack}) => {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -10,11 +10,20 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
   const [individualIngredients, setIndividualIngredients] = useState([]);
   const [individualInstructions, setIndividualInstructions] = useState([]);
 
+  useEffect(() => {
+    if (recipeToEdit) {
+      setName(recipeToEdit.name);
+      setIndividualIngredients(recipeToEdit.ingredients);
+      setIndividualInstructions(recipeToEdit.instructions);
+      setCategory(recipeToEdit.category);
+      setImage(recipeToEdit.image)
+    }
+  }, [recipeToEdit]);
+
   // INGREDIENTS
 
   const [editableIngreIndex, setEditableIngreIndex] = useState(-1);
   const [tempIngreValue, setTempIngreValue] = useState("");
-
 
   const handleItemClick = (index) => {
     setEditableIngreIndex(index);
@@ -22,18 +31,18 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
   };
 
   const handleInputChange = (e) => {
-    setTempIngreValue(e.target.value)
+    setTempIngreValue(e.target.value);
   };
 
   const handleEditValue = (e, value) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       const updatedIngredients = [...individualIngredients];
       updatedIngredients[editableIngreIndex] = value;
-      setIndividualIngredients(updatedIngredients)
+      setIndividualIngredients(updatedIngredients);
       setEditableIngreIndex(-1);
     }
-  }
+  };
   ////////
 
   // INSTRUCTIONS
@@ -47,32 +56,47 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
   };
 
   const handleIngInsputChange = (e) => {
-    setTempInsValue(e.target.value)
+    setTempInsValue(e.target.value);
   };
 
   const handleEditInsgValue = (e, value) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       const updatedInstructions = [...individualInstructions];
       updatedInstructions[editableInsIndex] = value;
-      setIndividualInstructions(updatedInstructions)
+      setIndividualInstructions(updatedInstructions);
       setEditableInsIndex(-1);
     }
-  }
-////////////////////////////////
+  };
+  ////////////////////////////////
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newRecipe = {
-      name: name,
-      ingredients: individualIngredients,
-      instructions: individualInstructions,
-      category: category,
-      image: image,
-    };
+    let newRecipe;
+    if (recipeToEdit) {
+      newRecipe = {
+        name: name,
+        ingredients: individualIngredients,
+        instructions: individualInstructions,
+        category: category,
+        image: image,
+        id: recipeToEdit.id
+      }
+
+    } else {
+      newRecipe = {
+          name: name,
+          ingredients: individualIngredients,
+          instructions: individualInstructions,
+          category: category,
+          image: image,
+        }
+    }
 
     addOrEditRecipe(newRecipe);
-
+    if (returnBack) {
+      returnBack(false)
+    }
     // Clear all States
     setName("");
     setIngredients("");
@@ -194,8 +218,6 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
             </div>
           )}
 
-
-
           <label>
             Instructions:
             <input
@@ -238,21 +260,10 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
         </form>
       </div>
     );
-  } else if (type === "edit") {
-    // Edit Form
+  } else if (type === "edit" && recipeToEdit) {
     return (
-      <div className="newRecipeForm">
-        <br />
-        <button
-          type="button"
-          className="btn close-new-form"
-          onClick={closeForm}
-        >
-          <i className="fas fa-times"></i>
-        </button>
-        <br />
-        <br />
-        <form onSubmit={handleSubmit}>
+      <div>
+      <form onSubmit={handleSubmit}>
           <Input
             label="Name: "
             value={name}
@@ -261,24 +272,88 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
             component="newRecipe"
           />
           <br />
-          <Input
-            label="Ingredients (comma-separated): "
-            value={ingredients}
-            type="text"
-            onChange={handleSetIngredients}
-            component="newRecipe"
-          />
+
+          {individualIngredients && (
+            <div>
+              <h3>Ingredients: </h3>
+              <ul>
+                {individualIngredients.map((ing, i) => (
+                  <li key={i}>
+                    {editableIngreIndex === i ? (
+                      <input
+                        type="text"
+                        value={tempIngreValue}
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => handleEditValue(e, tempIngreValue)}
+                      />
+                    ) : (
+                      <span onClick={() => handleItemClick(i)}>{ing}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <label>
+            Ingredients:
+            <input
+              type="text"
+              value={ingredients}
+              onChange={handleSetIngredients}
+              onKeyDown={(e) =>
+                handleAddToList(
+                  e,
+                  ingredients,
+                  setIngredients,
+                  setIndividualIngredients
+                )
+              }
+            />
+          </label>
+
+          {individualInstructions && (
+            <div>
+              <h3>Instructions: </h3>
+              <ul>
+                {individualInstructions.map((ing, i) => (
+                  <li key={i}>
+                    {editableInsIndex === i ? (
+                      <input
+                        type="text"
+                        value={tempInsValue}
+                        onChange={handleIngInsputChange}
+                        onKeyDown={(e) => handleEditInsgValue(e, tempInsValue)}
+                      />
+                    ) : (
+                      <span onClick={() => handleInsClick(i)}>{ing}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <label>
+            Instructions:
+            <input
+              type="text"
+              value={instructions}
+              onChange={handleSetInstructions}
+              onKeyDown={(e) =>
+                handleAddToList(
+                  e,
+                  instructions,
+                  setInstructions,
+                  setIndividualInstructions
+                )
+              }
+            />
+          </label>
+
           <br />
           <Input
-            label="Instructions (comma-separated): "
-            value={instructions}
-            type="text"
-            onChange={handleSetInstructions}
-            component="newRecipe"
-          />
-          <br />
-          <Input
-            label="Category"
+            label="Category: "
             value={category}
             type="text"
             onChange={handleSetCategory}
@@ -295,12 +370,12 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type }) => {
           <br />
           <br />
           <button className="btn recipe-btn" type="submit">
-            Add Recipe
+            Update Recipe
           </button>
           <br />
         </form>
       </div>
-    );
+    )
   }
 };
 

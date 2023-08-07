@@ -1,4 +1,4 @@
-const Input = ({ label, value, type, onChange, checked, component, handleAddToList }) => {
+const Input = ({ label, value, type, onChange, checked, component }) => {
   if (component === "search") {
     if (type === "radio") {
       return (
