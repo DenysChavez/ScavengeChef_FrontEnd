@@ -87,7 +87,7 @@
       ],
       "category": "Salad",
       "image": "https://www.jessicagavin.com/wp-content/uploads/2022/06/chicken-caesar-salad-24-600x900.jpg",
-      "like": false
+      "like": true
     },
     {
       "id": 3,
@@ -114,7 +114,7 @@
       ],
       "category": "Dessert",
       "image": "https://handletheheat.com/wp-content/uploads/2020/10/BAKERY-STYLE-CHOCOLATE-CHIP-COOKIES-9-637x637-1.jpg",
-      "like": false
+      "like": true
     },
     {
       "name": "Micho PRECIOSO",
@@ -131,7 +131,8 @@
       ],
       "category": "dessert",
       "image": "https://static.independent.co.uk/s3fs-public/thumbnails/image/2013/01/24/12/v2-cute-cat-picture.jpg?quality=75&width=990&crop=3%3A2%2Csmart&auto=webp",
-      "id": 4
+      "id": 4,
+      "like": true
     },
     {
       "name": "Precioso Michito",
@@ -147,10 +148,11 @@
       ],
       "category": "dessert",
       "image": "https://scontent-lga3-1.xx.fbcdn.net/v/t39.30808-6/317565893_195264236352564_6113969545457148905_n.jpg?_nc_cat=103&cb=99be929b-3346023f&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=YRUrAhaxJP0AX94EvIo&_nc_ht=scontent-lga3-1.xx&oh=00_AfDLV2AV5NgLYmJYzoc6cdEvf401k-f3cK12XEyA6hE8XA&oe=64D45099",
-      "id": 5
+      "id": 5,
+      "like": true
     },
     {
-      "name": "Dan Lindodfasdf",
+      "name": "Dan Pricioso",
       "ingredients": [
         "safas"
       ],
@@ -175,17 +177,16 @@
       "like": true
     },
     {
-      "name": "sdafsadf",
+      "name": "Michito Bonito",
       "ingredients": [
-        "sdfsad"
+        "un Michho"
       ],
       "instructions": [
         "sdgfsg"
       ],
       "category": "sdfsdfsa",
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/RedCat_8727.jpg",
-      "id": 8,
-      "like": true
+      "id": 8
     },
     {
       "name": "sdgdfgs",
@@ -313,6 +314,19 @@
       "category": "DSFSGA",
       "image": "DSAFSADFSAD",
       "id": 16
+    },
+    {
+      "name": "Dan & Micho",
+      "ingredients": [
+        "Un Dan",
+        "Un Michi"
+      ],
+      "instructions": [
+        "Mucho Amor"
+      ],
+      "category": "yummy",
+      "image": "https://cdn.shopify.com/s/files/1/0268/6861/files/animal-kitten-cat-tabby-mammal-gray-1225772-pxhere.com_grande.jpg?v=1555763712",
+      "id": 17
     }
   ]
 }

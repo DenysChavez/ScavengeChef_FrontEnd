@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
 
-const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack}) => {
+const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack, setTheRecipe}) => {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -94,7 +94,9 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack
     }
 
     addOrEditRecipe(newRecipe);
+
     if (returnBack) {
+      setTheRecipe(newRecipe)
       returnBack(false)
     }
     // Clear all States
@@ -273,6 +275,14 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack
           />
           <br />
 
+          <Input
+            label="Category: "
+            value={category}
+            type="text"
+            onChange={handleSetCategory}
+            component="newRecipe"
+          />
+          <br />
           {individualIngredients && (
             <div>
               <h3>Ingredients: </h3>
@@ -351,14 +361,7 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack
             />
           </label>
 
-          <br />
-          <Input
-            label="Category: "
-            value={category}
-            type="text"
-            onChange={handleSetCategory}
-            component="newRecipe"
-          />
+  
           <br />
           <Input
             label="Image URL: "
