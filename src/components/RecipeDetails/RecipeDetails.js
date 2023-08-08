@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MoreDetails from "./MoreDetails";
 import RecipeForm from "../RecipeForm";
 
@@ -6,11 +6,7 @@ const RecipeDetails = ({ recipe, closeRecipe, updateRecipe }) => {
 
   const [editRecipeBtn, setEditRecipeBtn] = useState(false);
 
-  const [name, setName] = useState(recipe.name);
-  const [ingredients, setIngredients] = useState(recipe.ingredients);
-  const [instructions, setInstructions] = useState(recipe.instructions);
-  const [category, setCategory] = useState(recipe.category);
-  const [image, setImage] = useState(recipe.image);
+  const [theRecipe, setTheRecipe] = useState(recipe)
 
   return (
     // Close Btn //
@@ -31,19 +27,19 @@ const RecipeDetails = ({ recipe, closeRecipe, updateRecipe }) => {
 
       {!editRecipeBtn && (
         <div className="recipe-details-content">
-          <h2 className="recipe-title">{name}</h2>
-          <p className="recipe-category">{category}</p>
-          <MoreDetails title="Ingredients:" details={ingredients} />
-          <MoreDetails title="Instructions:" details={instructions} />
+          <h2 className="recipe-title">{theRecipe.name}</h2>
+          <p className="recipe-category">{theRecipe.category}</p>
+          <MoreDetails title="Ingredients:" details={theRecipe.ingredients} />
+          <MoreDetails title="Instructions:" details={theRecipe.instructions} />
           <div className="recipe-details-img">
-            <img src={image} alt={name} />
+            <img src={theRecipe.image} alt={theRecipe.name} />
           </div>
         </div>
       )}
 
       {editRecipeBtn && (
         <div className="recipe-details-content">
-          <RecipeForm type="edit" recipeToEdit={recipe} addOrEditRecipe={updateRecipe} returnBack={setEditRecipeBtn} />
+          <RecipeForm type="edit" recipeToEdit={recipe} addOrEditRecipe={updateRecipe} returnBack={setEditRecipeBtn} setTheRecipe={setTheRecipe} />
         </div>
       )}
     </div>
