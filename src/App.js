@@ -7,6 +7,7 @@ import Quote from "./components/Quote";
 import RecipeForm from "./components/RecipeForm";
 import axios from "axios";
 import recipeService from "./service/recipes";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [recipes, setRecipes] = useState([]);
@@ -14,6 +15,8 @@ const App = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [addNewRecipeBtn, setAddNewRecipeBtn] = useState(false);
   const [showAll, setShowAll] = useState(true);
+  const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const startFetchRecipesHook = () => {
     recipeService
@@ -43,24 +46,37 @@ const App = () => {
   useEffect(fetchQuotesHook, []);
 
   const createNewRecipe = (newRecipe) => {
-    recipeService.create(newRecipe).then((createdRecipe) => {
-      setRecipes(recipes.concat(createdRecipe));
+    recipeService.create(newRecipe)
+      .then((createdRecipe) => {
+        setRecipes(recipes.concat(createdRecipe))
+        setMessage(`Your recipe ${createdRecipe.name} has been saved in the database`)
+        setTimeout(() => setMessage(null), 5000)
     });
     setAddNewRecipeBtn(false);
   };
 
   const updateRecipe = (newRecipe) => {
-    const recipe = recipes.find(n => n.id === newRecipe.id)
-  
+    const recipe = recipes.find((n) => n.id === newRecipe.id);
+
     recipeService
       .update(recipe.id, newRecipe)
       .then((returnedRecipe) => {
-        setRecipes(recipes.map(n => n.id !== newRecipe.id ? n : returnedRecipe));
+        setRecipes(
+          recipes.map((n) => (n.id !== newRecipe.id ? n : returnedRecipe))
+        );
+        setMessage(`Your recipe ${newRecipe.name} has been updated`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       })
-      .catch(error => {
-        alert(`the recipe with the ID ${newRecipe.id} was already deleted from server`)
-        setRecipes(recipes.filter(n => n.id !== newRecipe.id))
-      })
+      .catch((error) => {
+        setErrorMessage(
+          `The recipe with the ID ${newRecipe.id} was already deleted from server`
+        );
+        setTimeout(() => setErrorMessage(null), 5000)
+        setSelectedRecipe(null)
+        setRecipes(recipes.filter((n) => n.id !== newRecipe.id));
+      });
   };
 
   const toggleFavoriteRecipe = (id) => {
@@ -73,15 +89,15 @@ const App = () => {
   };
 
   const deleteRecipe = (id) => {
-    const recipe = recipes.find(n => n.id === id)
+    const recipe = recipes.find((n) => n.id === id);
     if (window.confirm(`Delete ${recipe.name} ?`)) {
-      recipeService
-        .deleteRecipe(id)
-        .then(() => {
-          setRecipes(recipes.filter(n => n.id !== id))
-        })
+      recipeService.deleteRecipe(id).then(() => {
+        setRecipes(recipes.filter((n) => n.id !== id))
+        setMessage(`Recipe ${recipe.name} has been deleted`)
+        setTimeout(() => setMessage(null), 5000)
+      });
     }
-  }
+  };
 
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
@@ -134,6 +150,8 @@ const App = () => {
             <SearchForm handleSubmit={handleSearchSubmit} />
           </div>
         </div>
+
+        <Notification message={message} errorMessage={errorMessage} />
 
         {!addNewRecipeBtn && (
           <div className="">
