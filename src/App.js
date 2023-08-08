@@ -50,16 +50,17 @@ const App = () => {
   };
 
   const updateRecipe = (newRecipe) => {
+    const recipe = recipes.find(n => n.id === newRecipe.id)
+  
     recipeService
-      .update(newRecipe.id, newRecipe)
+      .update(recipe.id, newRecipe)
       .then((returnedRecipe) => {
         setRecipes(recipes.map(n => n.id !== newRecipe.id ? n : returnedRecipe));
-        
-        // If the updated recipe is the currently selected recipe, update it as well
-        if (selectedRecipe && selectedRecipe.id === newRecipe.id) {
-          setSelectedRecipe(returnedRecipe);
-        }
-      });
+      })
+      .catch(error => {
+        alert(`the recipe with the ID ${newRecipe.id} was already deleted from server`)
+        setRecipes(recipes.filter(n => n.id !== newRecipe.id))
+      })
   };
 
   const toggleFavoriteRecipe = (id) => {
@@ -70,6 +71,17 @@ const App = () => {
       setRecipes(recipes.map((n) => (n.id !== id ? n : returnedRecipe)));
     });
   };
+
+  const deleteRecipe = (id) => {
+    const recipe = recipes.find(n => n.id === id)
+    if (window.confirm(`Delete ${recipe.name} ?`)) {
+      recipeService
+        .deleteRecipe(id)
+        .then(() => {
+          setRecipes(recipes.filter(n => n.id !== id))
+        })
+    }
+  }
 
   const handleSearchSubmit = ({ searchType, searchTerm }) => {
     let results;
@@ -156,6 +168,7 @@ const App = () => {
             recipes={recipesToShow}
             showDetails={handleShowDetailRecipe}
             toggleFavorite={toggleFavoriteRecipe}
+            deleteRecipe={deleteRecipe}
           />
         </div>
 

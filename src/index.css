@@ -10,6 +10,7 @@
     --browny: #B08045;
     --brown-dark: #594123;
     --favorite: rgb(144, 65, 65);
+    --delete: rgba(128, 128, 128, 0.552);
 }
 
 body {
@@ -30,6 +31,16 @@ a {
 }
 
 .fa-heart:hover {
+    cursor: pointer;
+}
+
+.fa-trash {
+    font-size: 1.8rem;
+    color: var(--delete);
+    margin-left: 50px;
+}
+
+.fa-trash:hover {
     cursor: pointer;
 }
 
