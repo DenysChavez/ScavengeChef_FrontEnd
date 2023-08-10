@@ -30,12 +30,11 @@ const App = () => {
   };
 
   const fetchQuotesHook = () => {
-    axios
-      .get("http://localhost:3001/quotes")
+    recipeService
+      .getAllQuotes()
       .then((response) => {
-        const data = response.data;
-        const randomNumer = Math.floor(Math.random() * data.length);
-        setQuotes(data[randomNumer]);
+        const randomNumer = Math.floor(Math.random() * response.length);
+        setQuotes(response[randomNumer]);
       })
       .catch((error) => {
         console.error("Error fetching quotes", error);

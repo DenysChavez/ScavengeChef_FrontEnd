@@ -144,7 +144,8 @@
       ],
       "category": "sagfsag",
       "image": "https://icatcare.org/app/uploads/2018/07/Thinking-of-getting-a-cat.png",
-      "id": 7
+      "id": 7,
+      "like": true
     },
     {
       "name": "Michito Bonito",
@@ -156,10 +157,11 @@
       ],
       "category": "sdfsdfsa",
       "image": "https://upload.wikimedia.org/wikipedia/commons/4/48/RedCat_8727.jpg",
-      "id": 8
+      "id": 8,
+      "like": true
     },
     {
-      "name": "Micho micho",
+      "name": "Micho micho bebe",
       "ingredients": [
         "gfsdgfdg",
         "fdgdfsgsdf",
@@ -171,24 +173,6 @@
       "category": "fsdfsdfsadf",
       "image": "https://bestfriends.org/sites/default/files/styles/story_desktop_1920x1230_/public/story_images/FirstKittensFoster1501sak_1124x554.jpg?h=5c78e16c&itok=zZbIP7q6",
       "id": 11
-    },
-    {
-      "name": "Los Bonitos Michitos",
-      "ingredients": [
-        "dsfsadfazdvz",
-        "Dan Boonito",
-        "gdgafsg",
-        "hsghsdfg"
-      ],
-      "instructions": [
-        "dsfsadfa",
-        "Micho Precioso",
-        "gdgafsg",
-        "hsghsdfg"
-      ],
-      "category": "dessert",
-      "image": "https://bestfriends.org/sites/default/files/styles/image_small/public/image/kitten_nursery_NYC_6598_rs_1124x554.jpg?itok=6ACYpFko",
-      "id": 13
     },
     {
       "name": "Dan & Micho",

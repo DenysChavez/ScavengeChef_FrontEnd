@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
-const baseUrl = "http://localhost:3001/recipes";
+const baseUrl = "/api/recipes";
+const quotesUrl = "/api/quotes"
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -22,9 +23,15 @@ const deleteRecipe = (id) => {
   return request.then(response => response.data)
 }
 
+const getAllQuotes = () => {
+  const request = axios.get(quotesUrl);
+  return request.then((response) => response.data);
+}
+
 export default {
   getAll,
   create,
   update,
-  deleteRecipe
+  deleteRecipe,
+  getAllQuotes
 };
