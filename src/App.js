@@ -5,7 +5,6 @@ import Results from "./components/Results/Results";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Quote from "./components/Quote";
 import RecipeForm from "./components/RecipeForm";
-import axios from "axios";
 import recipeService from "./service/recipes";
 import Notification from "./components/Notification";
 
@@ -50,7 +49,10 @@ const App = () => {
         setRecipes(recipes.concat(createdRecipe))
         setMessage(`Your recipe ${createdRecipe.name} has been saved in the database`)
         setTimeout(() => setMessage(null), 5000)
-    });
+      }).catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+    })
     setAddNewRecipeBtn(false);
   };
 
@@ -82,19 +84,28 @@ const App = () => {
     const recipe = recipes.find((n) => n.id === id);
     const changedRecipe = { ...recipe, like: !recipe.like };
 
-    recipeService.update(id, changedRecipe).then((returnedRecipe) => {
+    recipeService
+      .update(id, changedRecipe)
+      .then((returnedRecipe) => {
       setRecipes(recipes.map((n) => (n.id !== id ? n : returnedRecipe)));
-    });
+      }).catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+    })
   };
 
   const deleteRecipe = (id) => {
     const recipe = recipes.find((n) => n.id === id);
     if (window.confirm(`Delete ${recipe.name} ?`)) {
-      recipeService.deleteRecipe(id).then(() => {
+      recipeService.deleteRecipe(id)
+        .then(() => {
         setRecipes(recipes.filter((n) => n.id !== id))
         setMessage(`Recipe ${recipe.name} has been deleted`)
         setTimeout(() => setMessage(null), 5000)
-      });
+      }).catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
+      }) 
     }
   };
 
@@ -177,6 +188,8 @@ const App = () => {
             type="create"
             addOrEditRecipe={createNewRecipe}
             closeForm={handleCloseNewRecipeForm}
+            message={setMessage}
+            errorMessage={setErrorMessage}
           />
         )}
 

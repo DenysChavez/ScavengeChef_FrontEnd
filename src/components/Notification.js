@@ -1,6 +1,4 @@
 const Notification = ({ message, errorMessage }) => {
-
-    console.log(message);
     if (message === null && errorMessage === null) {
       return null
     } else if (errorMessage !== null) {

@@ -1,7 +1,6 @@
 import Recipe from "./Recipe";
 
 const Results = ({ recipes, showDetails, toggleFavorite, deleteRecipe }) => {
-  // console.log(recipes);
   return (
     <div id="recipes">
       {recipes.map((recipe, i) => (

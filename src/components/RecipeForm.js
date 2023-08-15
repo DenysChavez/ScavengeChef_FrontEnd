@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
 
-const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack, setTheRecipe}) => {
+const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack, setTheRecipe, setMessage, errorMessage}) => {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -71,6 +71,19 @@ const RecipeForm = ({ addOrEditRecipe, closeForm, type, recipeToEdit, returnBack
   ////////////////////////////////
   const handleSubmit = (e) => {
     e.preventDefault();
+
+
+    if (individualIngredients.length < 2) {
+      errorMessage("Please add at least 2 Ingredients");
+      setTimeout(() => errorMessage(null), 5000)
+      return; 
+    }
+
+    if (individualInstructions.length < 2) {
+      errorMessage("Please add at least 2 Instructions");
+      setTimeout(() => errorMessage(null), 5000);
+      return;
+    }
 
     let newRecipe;
     if (recipeToEdit) {
