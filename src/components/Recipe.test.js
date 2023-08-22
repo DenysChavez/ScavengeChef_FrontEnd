@@ -25,8 +25,10 @@ test("render content", () => {
       like: true
     }
 
-    const { container } = render(<Recipe recipe={recipe} />)
+    render(<Recipe recipe={recipe} />)
 
-    const div = container.querySelector(".recipe-item")
-    expect(div).toHaveTextContent('Chicken Caesar Salad')
+    const element = screen.getByText('Chicken Caesar Salad')
+
+    screen.debug(element)
+    expect(element).toBeDefined()
 })
