@@ -7,6 +7,7 @@ import Quote from "./components/Quote";
 import RecipeForm from "./components/RecipeForm";
 import recipeService from "./service/recipes";
 import Notification from "./components/Notification";
+import loginService from "./service/login";
 
 const App = () => {
   const [recipes, setRecipes] = useState([]);
@@ -16,6 +17,10 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
   const [message, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [user, setUser] = useState(null);
 
   const startFetchRecipesHook = () => {
     recipeService
@@ -43,16 +48,38 @@ const App = () => {
   useEffect(startFetchRecipesHook, []);
   useEffect(fetchQuotesHook, []);
 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const userLogin = await loginService.login({
+        username,
+        password,
+      });
+      setUser(userLogin);
+      setUsername("");
+      setPassword("");
+    } catch (exception) {
+      setErrorMessage("Wrong credentials");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
   const createNewRecipe = (newRecipe) => {
-    recipeService.create(newRecipe)
+    recipeService
+      .create(newRecipe)
       .then((createdRecipe) => {
-        setRecipes(recipes.concat(createdRecipe))
-        setMessage(`Your recipe ${createdRecipe.name} has been saved in the database`)
-        setTimeout(() => setMessage(null), 5000)
-      }).catch(error => {
-        setErrorMessage(error.response.data.error)
-        setTimeout(() => setErrorMessage(null), 5000)
-    })
+        setRecipes(recipes.concat(createdRecipe));
+        setMessage(
+          `Your recipe ${createdRecipe.name} has been saved in the database`
+        );
+        setTimeout(() => setMessage(null), 5000);
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => setErrorMessage(null), 5000);
+      });
     setAddNewRecipeBtn(false);
   };
 
@@ -74,8 +101,8 @@ const App = () => {
         setErrorMessage(
           `The recipe with the ID ${newRecipe.id} was already deleted from server`
         );
-        setTimeout(() => setErrorMessage(null), 5000)
-        setSelectedRecipe(null)
+        setTimeout(() => setErrorMessage(null), 5000);
+        setSelectedRecipe(null);
         setRecipes(recipes.filter((n) => n.id !== newRecipe.id));
       });
   };
@@ -87,25 +114,28 @@ const App = () => {
     recipeService
       .update(id, changedRecipe)
       .then((returnedRecipe) => {
-      setRecipes(recipes.map((n) => (n.id !== id ? n : returnedRecipe)));
-      }).catch(error => {
-        setErrorMessage(error.response.data.error)
-        setTimeout(() => setErrorMessage(null), 5000)
-    })
+        setRecipes(recipes.map((n) => (n.id !== id ? n : returnedRecipe)));
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => setErrorMessage(null), 5000);
+      });
   };
 
   const deleteRecipe = (id) => {
     const recipe = recipes.find((n) => n.id === id);
     if (window.confirm(`Delete ${recipe.name} ?`)) {
-      recipeService.deleteRecipe(id)
+      recipeService
+        .deleteRecipe(id)
         .then(() => {
-        setRecipes(recipes.filter((n) => n.id !== id))
-        setMessage(`Recipe ${recipe.name} has been deleted`)
-        setTimeout(() => setMessage(null), 5000)
-      }).catch(error => {
-        setErrorMessage(error.response.data.error)
-        setTimeout(() => setErrorMessage(null), 5000)
-      }) 
+          setRecipes(recipes.filter((n) => n.id !== id));
+          setMessage(`Recipe ${recipe.name} has been deleted`);
+          setTimeout(() => setMessage(null), 5000);
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => setErrorMessage(null), 5000);
+        });
     }
   };
 
@@ -147,6 +177,54 @@ const App = () => {
     ? recipes
     : recipes.filter((recipe) => recipe.like);
 
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
+  );
+
+  const userFeatures = () => (
+    <div>
+      {!addNewRecipeBtn && (
+        <div>
+          <button
+            className="btn newRecipeBtn"
+            onClick={() => setAddNewRecipeBtn(true)}
+          >
+            Create a New Recipe
+          </button>
+        </div>
+      )}
+
+      <div>
+        <button
+          className="btn favoriteBtn"
+          onClick={() => setShowAll(!showAll)}
+        >
+          Show {showAll ? "My Favorites" : "All"}
+        </button>
+      </div>
+    </div>
+  );
+
   ////////////////// RETURN/////////////////
   return (
     <div className="container">
@@ -163,25 +241,13 @@ const App = () => {
 
         <Notification message={message} errorMessage={errorMessage} />
 
-        {!addNewRecipeBtn && (
-          <div className="">
-            <button
-              className="btn newRecipeBtn"
-              onClick={() => setAddNewRecipeBtn(true)}
-            >
-              Create a New Recipe
-            </button>
+        {!user && loginForm()}
+        {user && (
+          <div>
+            <p>{user.name} logged in</p>
+            {userFeatures()}
           </div>
         )}
-
-        <div className="">
-          <button
-            className="btn favoriteBtn"
-            onClick={() => setShowAll(!showAll)}
-          >
-            Show {showAll ? "My Favorites" : "All"}
-          </button>
-        </div>
 
         {addNewRecipeBtn && (
           <RecipeForm
