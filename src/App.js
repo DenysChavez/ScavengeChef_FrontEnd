@@ -47,6 +47,14 @@ const App = () => {
 
   useEffect(startFetchRecipesHook, []);
   useEffect(fetchQuotesHook, []);
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedRecipeappUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      recipeService.setToken(user.token);
+    }
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -56,7 +64,12 @@ const App = () => {
         password,
       });
 
-      recipeService.setToken(userLogin.token)
+      window.localStorage.setItem(
+        "loggedRecipeappUser",
+        JSON.stringify(userLogin)
+      );
+
+      recipeService.setToken(userLogin.token);
       setUser(userLogin);
       setUsername("");
       setPassword("");
@@ -175,6 +188,13 @@ const App = () => {
     setAddNewRecipeBtn(false);
   };
 
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to Logout?")) {
+      window.localStorage.clear()
+      setUser(null);
+    }
+  };
+
   const recipesToShow = showAll
     ? recipes
     : recipes.filter((recipe) => recipe.like);
@@ -247,6 +267,7 @@ const App = () => {
         {user && (
           <div>
             <p>{user.name} logged in</p>
+            <button onClick={handleLogout}>Logout</button>
             {userFeatures()}
           </div>
         )}
