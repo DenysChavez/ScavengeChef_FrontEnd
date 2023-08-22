@@ -1,7 +1,7 @@
 import loginService from "../service/login";
 import recipeService from "../service/recipes";
 import { useState } from "react";
-
+import PropTypes from 'prop-types'
 
 const LoginForm = ({ setUser, setErrorMessage}) => {
   const [username, setUsername] = useState("");
@@ -56,6 +56,10 @@ const LoginForm = ({ setUser, setErrorMessage}) => {
        </form>
      </div>
    )
- }
+}
+
+LoginForm.prototype = {
+  setUser: PropTypes.func.isRequired,
+}
  
  export default LoginForm
