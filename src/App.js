@@ -7,7 +7,6 @@ import Quote from "./components/Quote";
 import RecipeForm from "./components/RecipeForm";
 import recipeService from "./service/recipes";
 import Notification from "./components/Notification";
-import loginService from "./service/login";
 import LoginForm from "./components/LoginForm";
 import Togglable from "./components/Togglable ";
 
@@ -20,8 +19,6 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   const startFetchRecipesHook = () => {
@@ -57,31 +54,6 @@ const App = () => {
       recipeService.setToken(user.token);
     }
   }, []);
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const userLogin = await loginService.login({
-        username,
-        password,
-      });
-
-      window.localStorage.setItem(
-        "loggedRecipeappUser",
-        JSON.stringify(userLogin)
-      );
-
-      recipeService.setToken(userLogin.token);
-      setUser(userLogin);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
-    }
-  };
 
   const createNewRecipe = (newRecipe) => {
     recipeService
@@ -200,27 +172,6 @@ const App = () => {
   const recipesToShow = showAll
     ? recipes
     : recipes.filter((recipe) => recipe.like);
-  //   const hideWhenVisible = { display: loginVisible ? "none" : "" };
-  //   const showWhenVisible = { display: loginVisible ? "" : "none" };
-
-  //   return (
-  //     <div>
-  //       <div style={hideWhenVisible}>
-  //         <button onClick={() => setLoginVisible(true)}>log in</button>
-  //       </div>
-  //       <div style={showWhenVisible}>
-  //         <LoginForm
-  //           username={username}
-  //           password={password}
-  //           handleUsernameChange={({ target }) => setUsername(target.value)}
-  //           handlePasswordChange={({ target }) => setPassword(target.value)}
-  //           handleSubmit={handleLogin}
-  //         />
-  //         <button onClick={() => setLoginVisible(false)}>cancel</button>
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   const userFeatures = () => (
     <div>
@@ -263,15 +214,9 @@ const App = () => {
         <Notification message={message} errorMessage={errorMessage} />
 
         {!user && (
-          <Togglable buttonLabel='login'>
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-        </Togglable>
+          <Togglable buttonLabel="login">
+            <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} />
+          </Togglable>
         )}
         {user && (
           <div>
