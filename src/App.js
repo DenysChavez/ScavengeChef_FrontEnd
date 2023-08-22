@@ -8,7 +8,7 @@ import RecipeForm from "./components/RecipeForm";
 import recipeService from "./service/recipes";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
-import Togglable from "./components/Togglable ";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [recipes, setRecipes] = useState([]);
