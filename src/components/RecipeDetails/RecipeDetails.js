@@ -2,7 +2,7 @@ import { useState } from "react";
 import MoreDetails from "./MoreDetails";
 import RecipeForm from "../RecipeForm";
 
-const RecipeDetails = ({ recipe, closeRecipe, updateRecipe }) => {
+const RecipeDetails = ({ recipe, closeRecipe, updateRecipe, user}) => {
 
   const [editRecipeBtn, setEditRecipeBtn] = useState(false);
 
@@ -19,7 +19,7 @@ const RecipeDetails = ({ recipe, closeRecipe, updateRecipe }) => {
         <i className="fas fa-times"></i>
       </button>
 
-      {!editRecipeBtn && (
+      {(!editRecipeBtn && user !== null) && (
         <button className="btn editBtn" onClick={() => setEditRecipeBtn(true)}>
           Edit Recipe
         </button>

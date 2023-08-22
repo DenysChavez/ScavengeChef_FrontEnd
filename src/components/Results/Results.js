@@ -1,6 +1,6 @@
 import Recipe from "./Recipe";
 
-const Results = ({ recipes, showDetails, toggleFavorite, deleteRecipe }) => {
+const Results = ({ recipes, showDetails, toggleFavorite, deleteRecipe, user }) => {
   return (
     <div id="recipes">
       {recipes.map((recipe, i) => (
@@ -10,6 +10,7 @@ const Results = ({ recipes, showDetails, toggleFavorite, deleteRecipe }) => {
           showDetails={showDetails}
           toggleFavorite={toggleFavorite}
           deleteRecipe={deleteRecipe}
+          user={user}
         />
       ))}
     </div>

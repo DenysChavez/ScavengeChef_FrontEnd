@@ -288,6 +288,7 @@ const App = () => {
             showDetails={handleShowDetailRecipe}
             toggleFavorite={toggleFavoriteRecipe}
             deleteRecipe={deleteRecipe}
+            user={user}
           />
         </div>
 
@@ -296,6 +297,7 @@ const App = () => {
             recipe={selectedRecipe}
             closeRecipe={handleCloseDetailRecipe}
             updateRecipe={updateRecipe}
+            user={user}
           />
         )}
       </div>
