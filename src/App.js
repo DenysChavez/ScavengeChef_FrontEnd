@@ -55,6 +55,8 @@ const App = () => {
         username,
         password,
       });
+
+      recipeService.setToken(userLogin.token)
       setUser(userLogin);
       setUsername("");
       setPassword("");
